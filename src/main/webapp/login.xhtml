@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html">
+<head>
+	<title>Calculator Login</title>
+	<link type="text/css" rel="stylesheet" href="resources/css/styleLogin.css" />
+</head>
+
+<h:body id="initialPageBody">
+	<h:outputText value="#{user.clear}" />
+	<div id="initialPage">
+		<h:form id="initialPageForm">
+			<div id="initialPageTitle">
+				Welcome to WebCalc
+				<p>Please insert your name and password</p>
+			</div>
+			<div id="initialPageInput">
+				<h:inputText styleClass="initialPageUsername" title="Name"
+					value="#{user.name}" required="true"
+					requiredMessage="Please insert your name (50 charaters max.). Thank you."
+					maxlength="50" />
+				<h:inputText styleClass="initialPageUsername" title="Password"
+					value="#{user.pass}" required="true"
+					requiredMessage="Please insert your password (10 charaters max.). Thank you."
+					maxlength="50" />
+				<p></p>
+			</div>
+			<h:commandButton class="initialPageButton" value="OK"
+				action="index"/>
+			<div id="initialPageMessageSetings">
+				<h:messages showSummary="true" showDetail="false"
+					errorStyle="color: red" />
+			</div>
+		</h:form>
+	</div>
+</h:body>
+
+</html>
