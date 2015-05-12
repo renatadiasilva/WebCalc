@@ -21,9 +21,9 @@ public class Historic implements Serializable {
 		return list;
 	}
 
-	public void addToList(String e, String r) {
+	public void addToList(String e, String r, String t) {
 		String rred = r.substring(0, (int) Math.min(10,r.length()));
-		ExpressionC ex = new ExpressionC(e, rred);
+		ExpressionC ex = new ExpressionC(e, rred, t);
 		list.add(ex);
 	}
 

@@ -31,7 +31,7 @@ public class Calculator implements Serializable {
 	private Statistics stat;
 	
 	public Calculator() {
-		expression = new ExpressionC("0", "0");
+		expression = new ExpressionC("0", "0", "0");
 		scientific = false;
 		radians = true;
 		clean = true;
@@ -212,6 +212,7 @@ public class Calculator implements Serializable {
 
 		// Compute the result of the expression
 		String s = "";
+		double time = 0.0;
 		error = false;
 		
 		try {
@@ -230,8 +231,16 @@ public class Calculator implements Serializable {
 					.build();
 
 			try{
+				// Initial time
+				long time0 = System.nanoTime();
+				
+				// Computation
 				double r = e.evaluate();
 				
+				// Total time of computation
+				time = (System.nanoTime() - time0)/1000000.0;
+
+				// Convertion to string
 				s = r+"";
 
 				double tol = Math.pow(10, -10);
@@ -240,6 +249,8 @@ public class Calculator implements Serializable {
 				else if (Math.abs(Math.round(r)-r) < tol) s = Math.round(r)+"";
 				// if result is integer get ride of ".0"
 				else if (r % 1 == 0) s = s.substring(0, s.length()-2);
+				
+				s += "/"+time;
 
 			} catch(Exception e1) {
 				s = e1.getMessage();
@@ -338,8 +349,12 @@ public class Calculator implements Serializable {
 		case "reset": add = "0"; clean = true; break;
 		case "result": add = result(); r = true; clean = true;
 			if (!error) {
-				expression.setResult(add);
-				hist.addToList(expression.getExp(), expression.getResult()); updateStat();}
+				String[] a = add.split("/");
+				expression.setResult(a[0]);
+				expression.setTime(a[1]);
+				hist.addToList(expression.getExp(), expression.getResult(), expression.getTime());
+				updateStat();
+				add = a[0];}
 			break;
 		}
 		

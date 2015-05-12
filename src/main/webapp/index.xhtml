@@ -209,9 +209,9 @@
 					</h:panelGroup>
 
 				</div>
-				<div class="ui-grid-col-4">
+				<div class="ui-grid-col-4" style="padding-left:-50px;">
 
-					<p:dataTable class="table" var="e" value="#{calculator.hist.list}">
+					<p:dataTable class="table" var="e" value="#{calculator.hist.list}" style="width:350px;">
 						<f:facet name="header">History</f:facet>
 						<p:column class="left-col" headerText="Expression">
 							<h:commandLink style="text-decoration: none;"
@@ -221,10 +221,13 @@
 							<h:commandLink style="text-decoration: none;"
 								action="#{calculator.displayExp(e.result)}" value="#{e.result}" />
 						</p:column>
+						<p:column headerText="Time (ms)">
+							<h:outputText value="#{e.time}" /> 
+						</p:column>
 					</p:dataTable>
 					<br /> <br />
 					<p:dataTable class="table" var="func"
-						value="#{calculator.stat.list}">
+						value="#{calculator.stat.list}" style="width:350px;">
 						<f:facet name="header">Statistics</f:facet>
 						<p:column class="left-col" headerText="Operation">
 							<h:outputText value="#{func.name}" />
