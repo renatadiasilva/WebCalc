@@ -3,10 +3,6 @@ package manageChat;
 import java.util.Date;
 import javax.ejb.Local;
  
-/**
- * Local interface for chat lagic EJB
- * @author Danon
- */
 @Local
 public interface MessageManagerLocal {
  

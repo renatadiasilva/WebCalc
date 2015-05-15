@@ -10,14 +10,6 @@
 	<title>Calculator</title>
 	<link type="text/css" rel="stylesheet" href="resources/css/style.css" />
 </h:head>
-<script type="text/javascript">
-        setInterval("nextMessage()", 200); //update the chart every 200 ms               
-         
-        function updateMessages(xhr, status, args) {
-            if(!args.ok) return;
-            $('#chat').append('<div class="msg">[' +args.date+ '] <strong>'+args.user+'</strong>: '+args.message+'</div>');
-        }
-</script>
 
 <h:body
 	style="background-image: url('resources/images/grey_background.jpg'); ">
@@ -27,35 +19,111 @@
 			<p id="titulo2">Developed by Renata Silva</p>
 			
 			<div class="userInfo">
-			<ui:insert name="userInfo" style="text-align:center">
-			<h:outputText value="#{user.name}" />
+			<ui:insert name="userInfo">
 			</ui:insert>
 	</div>
 			
 		</div>
 	</div>
 	<div id="container">
-		<h:form prependId="false">
-		
+		<h:form>
+
 			<div class="ui-grid ui-grid-responsive">
 
 				<div class="ui-grid-col-4">
-					<p:panelGrid columns="1" layout="grid" style="padding-right:10px;">
-					<h:panelGrid columns="2">
-        	        Message: <p:inputTextarea value="#{chat.message.message}" />
-						<p:commandButton value="Send" actionListener="#{chat.sendMessage}" />
-					</h:panelGrid>
+					<p:panelGrid columns="1" style="padding-right:10px">
+						<div id="chat">
+							<!-- Enter menu -->
+							<h:form rendered="#{!chat.active}">
 
-					<p:remoteCommand name="nextMessage"
-						actionListener="#{chat.firstUnreadMessage}"
-						oncomplete="updateMessages(xhr, status, args);" />
-					<hr />
-					<h3>Life Chat</h3>
-					<div id="chat" style="text-align: left"></div>
+								<!-- Login -->
+								<h:form rendered="#{chat.login}">
+									<h:form>
+										<h:outputText value="Login" style="color:green;font-weigth:bold;"/>
+										<p:panelGrid columns="2">
+											<h:outputText value="Name" />
+											<h:inputText value="#{chat.name}" />
+											<h:outputText value="Password" />
+											<h:inputSecret value="#{chat.pass}" />
+										</p:panelGrid>
+										<p:column rowspan="2">
+										<h:commandButton value="Ok" action="#{chat.loginUser}" />
+										<h:commandButton value="Sign Up"
+											action="#{chat.setLogin(false)}" />
+										</p:column>
+									</h:form>
+								</h:form>
+
+								<!-- Sign Up -->
+								<h:form rendered="#{!chat.login}">
+									<h:form>
+										<h:outputText value="Sign Up" style="color:green;font-weigth:bold;" />
+										<p:panelGrid columns="2">
+											<h:outputText value="Name" />
+											<h:inputText value="#{chat.name}" />
+											<h:outputText value="Password" />
+											<h:inputSecret value="#{chat.pass}" />
+											<h:outputText value="Repeat Password" />
+											<h:inputSecret value="#{chat.repeatPass}" />
+										</p:panelGrid>
+										<p:column rowspan="2">
+										<h:commandButton value="Ok" action="#{chat.signUp}" />
+										<h:commandButton value="Back" action="#{chat.setLogin(true)}" />
+										</p:column>
+									</h:form>
+								</h:form>
+							</h:form>
+
+							<h:form id="chatMessage" rendered="#{chat.active}">
+
+								<!-- new message -->
+								<h:form>
+									<p:panelGrid columns="1">
+									<p:column rowspan="3">
+									<h:outputText value="Message  " />
+									<h:inputText value="#{chat.message}" />
+									<h:commandButton value="Send" action="#{chat.addMessage}" />
+									</p:column>
+									</p:panelGrid>
+									<p:column rowspan="1">
+									<h:commandButton value="Logout" action="#{chat.logoutUser}" />
+									</p:column>
+								</h:form>
+
+							<!-- Chat -->
+							<f:ajax render="userChat">
+
+									<h:form rendered="#{chat.active}">
+
+										<p:panelGrid columns="1">
+											<f:facet name="header">Live Chat</f:facet>
+											<p:dataTable id="userChat" value="#{chat.userChat}" var="msg"
+												style="text-align:left; width:350px;">
+												<h:column>#{msg}</h:column>
+											</p:dataTable>
+										</p:panelGrid>
+
+										<h:commandButton id="refreshChat" value="refresh"
+											/>
+
+									</h:form>
+
+								</f:ajax>
+
+							</h:form>
+
+							<h:form id="errorMessage" rendered="#{chat.error}">
+								<p:panelGrid columns="1">
+									<h:outputText style="color:red;font-weigth:bold;" value="#{chat.message}" action="#{chat.errorMessage(chat.errorType)}" />
+								</p:panelGrid>
+							</h:form>
+
+							<script src="js/timer.js" />
+						</div>
 					</p:panelGrid>
-					
+
 				</div>
-				 
+
 				<div class="ui-grid-col-4">
 
 					<p:panelGrid columns="1" layout="grid">
@@ -209,9 +277,10 @@
 					</h:panelGroup>
 
 				</div>
-				<div class="ui-grid-col-4" style="padding-left:-50px;">
+				<div class="ui-grid-col-4" style="padding-left: -50px;">
 
-					<p:dataTable class="table" var="e" value="#{calculator.hist.list}" style="width:350px;">
+					<p:dataTable class="table" var="e" value="#{calculator.hist.list}"
+						style="width:350px;">
 						<f:facet name="header">History</f:facet>
 						<p:column class="left-col" headerText="Expression">
 							<h:commandLink style="text-decoration: none;"
@@ -222,7 +291,7 @@
 								action="#{calculator.displayExp(e.result)}" value="#{e.result}" />
 						</p:column>
 						<p:column headerText="Time (ms)">
-							<h:outputText value="#{e.time}" /> 
+							<h:outputText value="#{e.time}" />
 						</p:column>
 					</p:dataTable>
 					<br /> <br />
@@ -241,7 +310,7 @@
 				</div>
 			</div>
 		</h:form>
-	</div>
+	</div>	
 
 </h:body>
 </html>

@@ -24,11 +24,14 @@ public class Calculator implements Serializable {
 	private boolean clean;
 	private boolean error;
 	
+//	@Inject
+//	private User user;
+	
 	@Inject
 	private Historic hist;
 	
 	@Inject
-	private Statistics stat;
+	private Statistic stat;
 	
 	public Calculator() {
 		expression = new ExpressionC("0", "0", "0");
@@ -72,7 +75,7 @@ public class Calculator implements Serializable {
 		return hist;
 	}
 
-	public Statistics getStat() {
+	public Statistic getStat() {
 		return stat;
 	}
 
@@ -452,4 +455,12 @@ public class Calculator implements Serializable {
 		return a;
 	}
 
+//	public User getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
+//
 }

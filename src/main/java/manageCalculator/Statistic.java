@@ -10,11 +10,11 @@ import javax.inject.Named;
 
 @Named
 @ApplicationScoped
-public class Statistics {
+public class Statistic {
 		
 	HashMap<String, Integer> list =  new HashMap<String, Integer>();
 
-	public Statistics() {
+	public Statistic() {
 		list.put("plus",0);
 		list.put("minus",0);
 		list.put("times",0);

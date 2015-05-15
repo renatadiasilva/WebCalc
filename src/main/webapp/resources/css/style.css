@@ -104,7 +104,3 @@ body {
 a:hover, a:link, a:active, a:visited{
 	text-decoration: none;
 }
-
-#chat {
-    border: 2px groove (internal value);
-}

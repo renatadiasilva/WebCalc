@@ -15,7 +15,7 @@ import org.primefaces.context.RequestContext;
  
 @ManagedBean
 @ViewScoped
-public class Chat implements Serializable {
+public class Chat1 implements Serializable {
  
  	private static final long serialVersionUID = -8938358674314410115L;
 
@@ -24,9 +24,10 @@ public class Chat implements Serializable {
  
     private final List<Message> messages;
     private Date lastUpdate;
+
     private Message message;
  
-    public Chat() {
+    public Chat1() {
         messages = Collections.synchronizedList(new LinkedList<Message>());
         lastUpdate = new Date(0);
         message = new Message();
@@ -57,6 +58,7 @@ public class Chat implements Serializable {
  
        Message m = mm.getFirstAfter(lastUpdate);
        ctx.addCallbackParam("ok", m!=null);
+       
        if(m==null)
            return;
  
@@ -64,7 +66,6 @@ public class Chat implements Serializable {
  
        ctx.addCallbackParam("user", m.getUser());
        ctx.addCallbackParam("date", m.getDate().toString());
-       // text
        ctx.addCallbackParam("message", m.getMessage());
  
     }
@@ -72,5 +73,5 @@ public class Chat implements Serializable {
 	public List<Message> getMessages() {
 		return messages;
 	}
- 
+
 }

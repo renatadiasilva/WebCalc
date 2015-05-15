@@ -1,37 +1,58 @@
 package manageCalculator;
 
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
-import java.io.Serializable;
+import java.util.ArrayList;
 
-@Named
-@SessionScoped
-public class User implements Serializable {
+public class User {
 
-	private static final long serialVersionUID = -6768869063601481932L;
 	private String name;
 	private String pass;
+	private boolean logged;
+	private ArrayList<String> chatMessages;
+	//synchornize??
 
-    public User() {}
+    public User(String name, String pass) {
+    	this.name = name;
+    	this.pass = pass;
+    	this.logged = false;
+    	this.chatMessages = new ArrayList<String>();
+//		this.chatMessages.add("Live Chat");
+    }
 
     public String getName() {
     	return name;
     }
 
-    public void setName(String user_name) {
-    	name = user_name;
+    public void setName(String name) {
+    	this.name = name;
     }
     
-    public String getClear() {
-    	name = "";
-    	return name;
-    }
-
-	public String getPass() {
-		return pass;
+	public ArrayList<String> getChatMessages() {
+		return chatMessages;
 	}
 
-	public void setPass(String pass) {
-		this.pass = pass;
+	public void setChatMessages(ArrayList<String> chatMessages) {
+		this.chatMessages = chatMessages;
 	}
+	
+	public void addMessage(String message){
+		this.chatMessages.add(message);
+	}
+	
+	public void clean(){
+		logged = false;
+		chatMessages.clear();
+	}
+
+	public boolean checkPass(String p) {
+		return pass.equals(p); 
+	}
+
+	public boolean isLogged() {
+		return logged;
+	}
+
+	public void setLogged(boolean logged) {
+		this.logged = logged;
+	}
+
 }

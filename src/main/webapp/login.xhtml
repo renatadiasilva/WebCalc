@@ -9,7 +9,7 @@
 </head>
 
 <h:body id="initialPageBody">
-	<h:outputText value="#{user.clear}" />
+	<h:outputText value="#{calculator.user.clear}" />
 	<div id="initialPage">
 		<h:form id="initialPageForm">
 			<div id="initialPageTitle">
@@ -18,13 +18,13 @@
 			</div>
 			<div id="initialPageInput">
 				<h:inputText styleClass="initialPageUsername" title="Name"
-					value="#{user.name}" required="true"
-					requiredMessage="Please insert your name (50 charaters max.). Thank you."
+					value="#{calculator.user.name}" required="true"
+					requiredMessage="Please insert your username (50 charaters max.). Thank you."
 					maxlength="50" />
 				<h:inputText styleClass="initialPageUsername" title="Password"
-					value="#{user.pass}" required="true"
+					value="#{calculator.user.pass}" required="true"
 					requiredMessage="Please insert your password (10 charaters max.). Thank you."
-					maxlength="50" />
+					maxlength="10" />
 				<p></p>
 			</div>
 			<h:commandButton class="initialPageButton" value="OK"

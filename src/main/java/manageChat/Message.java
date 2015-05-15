@@ -7,10 +7,10 @@ public class Message implements Serializable {
 
 	private static final long serialVersionUID = 1628612092691401920L;
 	private Date date;
-    private String user;
+	private String user;
     private String message;
- 
-    public Date getDate() {
+    
+	public Date getDate() {
         return date;
     }
  
@@ -25,12 +25,13 @@ public class Message implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
  
-    public String getUser() {
-        return user;
-    }
- 
-    public void setUser(String user) {
-        this.user = user;
-    }
 }
