@@ -30,7 +30,6 @@ public class Chat implements Serializable {
 	
 	private String message;
 	private boolean error;
-	private int errorType;
 
 	public Chat() {
 		active = false;
@@ -88,27 +87,26 @@ public class Chat implements Serializable {
 			if (!pass.isEmpty() ) {
 				if (pass.equals(repeatPass)) {
 					user = users.newUser(name, pass);
-					if (user != null) {
+					if (user != null) { //new user registed
+						pass="";
+						login = true;
+						active = false;
+						error = false;
 					} else { // existent user
 						error = true;
 						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This username already exists!"));
 						reset();
 					}
-
-					reset();
-					login = true;
-					active = false;
-
 				} else { // pass not equal
 					error = true;
 					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Repeat password not equal to password!"));
-					reset();
+					repeatPass="";
 				}
 				
 			} else { //empty pass
 				error = true;
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty password!"));
-				reset();
+				pass="";
 			}
 		} else { //empty name
 			error = true;
@@ -128,11 +126,13 @@ public class Chat implements Serializable {
 	public void newUser() {
 		login = false;
 		error = false;
+		reset();
 	}
 	
 	public void goBack() {
 		login = true;
 		error = false;
+		reset();
 	}
 
 	public void loginUser(){
@@ -141,6 +141,7 @@ public class Chat implements Serializable {
 				user = users.findUser(name, pass);
 
 				if (user != null) {
+					error = false;
 					user.setLogged(true);
 				} else { //non-existent user or wrong pass
 					error = true;
@@ -163,6 +164,7 @@ public class Chat implements Serializable {
 	public void logoutUser(){
 		user.clean();
 		reset();
+		message="";
 		login = true;
 		active = false;
 		error = false;
@@ -179,6 +181,7 @@ public class Chat implements Serializable {
 	// new message added to all logged users
 	public void addMessage() {
 		if(!message.isEmpty()){
+			error = false;
 			users.addMessage(user.getName()+": "+message);
 			message = "";
 		} else { // empty message
@@ -196,17 +199,10 @@ public class Chat implements Serializable {
 		} else return user.getChatMessages();
 	}
 
-	//Refresh - Vai confirmar o estado activo do utiizador e vai retirar utilizadores inactivos
 	public void refresh() {
-//		if (!user.isLogged()) {
-//			user.clean();
-//			user = null;
-//			reset();
-//			login = true;
-//			active = false;
-//		} else 
 		active = true;		
 	}
+
 
 	public boolean isError() {
 		return error;
@@ -214,14 +210,6 @@ public class Chat implements Serializable {
 
 	public void setError(boolean error) {
 		this.error = error;
-	}
-
-	public int getErrorType() {
-		return errorType;
-	}
-
-	public void setErrorType(int errorType) {
-		this.errorType = errorType;
 	}
 
 	public void reset() {

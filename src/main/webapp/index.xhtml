@@ -18,10 +18,11 @@
 			<p id="titulo">Calculator</p>
 			<p id="titulo2">Developed by Renata Silva</p>			
 		</div>
+		 
 	</div>
 	<div id="container">
 		<h:form id="myRefresh">
-			<p:poll interval="1" update="myStat" />
+			<p:poll interval="1" update="myStat userChat" />
 		</h:form>
 
 		<h:form prependId="false">
@@ -29,30 +30,33 @@
 			<div class="ui-grid ui-grid-responsive">
 
 				<div class="ui-grid-col-4">
+
 					<p:panelGrid columns="1" style="padding-right:10px">
 						<div id="chat">
-						
+
 							<h:form rendered="#{!chat.active}">
-							
+
 								<h:form rendered="#{chat.login}">
 									<h:form>
-										<h:outputText value="Login" style="color:green;font-weigth:bold;"/>
+										<h:outputText value="Login to Live Chat"
+											style="color:green;font-weigth:bold;" />
 										<p:panelGrid columns="2">
 											<h:outputText value="Username" />
-											<h:inputText id="myUser" value="#{chat.name}" />											
+											<h:inputText id="myUser" value="#{chat.name}" />
 											<h:outputText value="Password" />
 											<h:inputSecret value="#{chat.pass}" />
 										</p:panelGrid>
 										<p:column rowspan="2">
-										<h:commandButton value="Ok" action="#{chat.loginUser}" />
-										<h:commandButton value="New User" action="#{chat.newUser}" />
+											<h:commandButton value="Ok" action="#{chat.loginUser}" />
+											<h:commandButton value="New User" action="#{chat.newUser}" />
 										</p:column>
 									</h:form>
 								</h:form>
-								
+
 								<h:form rendered="#{!chat.login}">
 									<h:form>
-										<h:outputText value="New User" style="color:green;font-weigth:bold;" />
+										<h:outputText value="New User"
+											style="color:green;font-weigth:bold;" />
 										<p:panelGrid columns="2">
 											<h:outputText value="Username" />
 											<h:inputText value="#{chat.name}" />
@@ -62,55 +66,60 @@
 											<h:inputSecret value="#{chat.repeatPass}" />
 										</p:panelGrid>
 										<p:column rowspan="2">
-										<h:commandButton value="Ok" action="#{chat.signUp}" />
-										<h:commandButton value="Back" action="#{chat.goBack}" />
+											<h:commandButton value="Ok" action="#{chat.signUp}" />
+											<h:commandButton value="Back" action="#{chat.goBack}" />
 										</p:column>
 									</h:form>
 								</h:form>
 							</h:form>
 
 							<h:form id="chatMessage" rendered="#{chat.active}">
-								<h:form>
-									<p:panelGrid columns="1">
-									<p:column rowspan="3">
-									<h:outputText value="Message  " />
-									<h:inputText value="#{chat.message}" />
-									<h:commandButton value="Send" action="#{chat.addMessage}" />
-									</p:column>
-									</p:panelGrid>
-									<p:column rowspan="1">
-									<h:commandButton value="Logout" action="#{chat.logoutUser}" />
-									</p:column>
+
+									<h:form>
+																		<h:outputText
+										style="text-align:left;font-weigth:bold;font-family: Arial,sans-serif;"
+										value="Username: #{chat.user.name}" />
+									
+										<p:panelGrid columns="1">
+											<p:column rowspan="3">
+												<h:outputText value="Message  " />
+												<h:inputText value="#{chat.message}" />
+												<h:commandButton value="Send" action="#{chat.addMessage}" />
+											</p:column>
+										</p:panelGrid>
+										<p:column rowspan="1">
+											<h:commandButton value="Logout" action="#{chat.logoutUser}" />
+										</p:column>
+									</h:form>
+
 								</h:form>
 
-							<f:ajax render="userChat">
-									<h:form rendered="#{chat.active}">
+								<h:form rendered="#{chat.error}">
+									<p:panelGrid columns="1" style="text-align:left">
+										<h:messages showSummary="true" showDetail="false"
+											style="color: red" />
+									</p:panelGrid>
+								</h:form>
 
-										<p:panelGrid columns="1">
-											<f:facet name="header">Live Chat</f:facet>
-											<p:dataTable id="userChat" value="#{chat.userChat}" var="msg"
-												style="text-align:left; width:350px;">
-												<h:column>#{msg}</h:column>
-											</p:dataTable>
-										</p:panelGrid>
-
-										<h:commandButton id="refreshChat" value="refresh"
-											/>
-									</h:form>
-							</f:ajax>
-
-							</h:form>
-
-							<h:form rendered="#{chat.error}" >
-								<p:panelGrid columns="1" style="text-align:left">
-									<h:messages showSummary="true" showDetail="false"
-									style="color: red" />
-								</p:panelGrid>
-							</h:form>
-
-							<script src="js/timer.js" />
+								<script src="js/timer.js" />
 						</div>
 					</p:panelGrid>
+
+					<br />
+					<br />
+					<h:form id="userChat">
+						<h:form rendered="#{chat.active}">
+
+							<p:panelGrid columns="1">
+								<f:facet name="header">Live Chat</f:facet>
+								<h:dataTable value="#{chat.userChat}" var="msg"
+									style="text-align:left; width:380px;">
+									<h:column>#{msg}</h:column>
+								</h:dataTable>
+							</p:panelGrid>
+
+						</h:form>
+					</h:form>
 
 				</div>
 
@@ -129,65 +138,85 @@
 							styleClass="textareabasicdisplay" readonly="true"
 							value="#{calculator.expression.exp}" />
 						<p:column rowspan="2">
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('reset')}">
-							<h:commandButton class="btn-CCE" value="C" title="delete expression" />
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('reset')}">
+								<h:commandButton class="btn-CCE" value="C"
+									title="delete expression" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('deleteL')}">
-							<h:commandButton class="btn-CCE" value="&#8592;" title="delete last character" />
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('deleteL')}">
+								<h:commandButton class="btn-CCE" value="&#8592;"
+									title="delete last character" />
 							</f:ajax>
 						</p:column>
 					</p:panelGrid>
 
 					<p:panelGrid columns="4" layout="grid" style="padding-top:5px">
-					
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number1')}">
-						<h:commandButton class="btn-numb" value="1"/>
+
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number1')}">
+							<h:commandButton class="btn-numb" value="1" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number2')}">
-						<h:commandButton class="btn-numb" value="2"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number2')}">
+							<h:commandButton class="btn-numb" value="2" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number3')}">
-						<h:commandButton class="btn-numb" value="3"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number3')}">
+							<h:commandButton class="btn-numb" value="3" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('plus')}">
-						<h:commandButton class="btn-op" value="+"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('plus')}">
+							<h:commandButton class="btn-op" value="+" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number4')}">
-						<h:commandButton class="btn-numb" value="4"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number4')}">
+							<h:commandButton class="btn-numb" value="4" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number5')}">
-						<h:commandButton class="btn-numb" value="5"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number5')}">
+							<h:commandButton class="btn-numb" value="5" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number6')}">
-						<h:commandButton class="btn-numb" value="6"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number6')}">
+							<h:commandButton class="btn-numb" value="6" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('minus')}">
-						<h:commandButton class="btn-op" value="-"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('minus')}">
+							<h:commandButton class="btn-op" value="-" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number7')}">
-						<h:commandButton class="btn-numb" value="7"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number7')}">
+							<h:commandButton class="btn-numb" value="7" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number8')}">
-						<h:commandButton class="btn-numb" value="8"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number8')}">
+							<h:commandButton class="btn-numb" value="8" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number9')}">
-						<h:commandButton class="btn-numb" value="9"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number9')}">
+							<h:commandButton class="btn-numb" value="9" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('times')}">
-						<h:commandButton class="btn-op" value="&#215;"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('times')}">
+							<h:commandButton class="btn-op" value="&#215;" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('number0')}">
-						<h:commandButton class="btn-numb" value="0"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('number0')}">
+							<h:commandButton class="btn-numb" value="0" />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('decPoint')}">
-						<h:commandButton class="btn-op" value="."/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('decPoint')}">
+							<h:commandButton class="btn-op" value="." />
 						</f:ajax>
-						<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('divide')}">
-						<h:commandButton class="btn-op" value="&#247;"/>
+						<f:ajax event="click" render="basicdisplay"
+							listener="#{calculator.key('divide')}">
+							<h:commandButton class="btn-op" value="&#247;" />
 						</f:ajax>
 
-						<f:ajax event="click" render="basicdisplay myHist myStat" listener="#{calculator.key('result')}" >
-						<h:commandButton class="btn-op-equal" value="=" />
+						<f:ajax event="click" render="basicdisplay myHist myStat"
+							listener="#{calculator.key('result')}">
+							<h:commandButton class="btn-op-equal" value="=" />
 						</f:ajax>
 
 					</p:panelGrid>
@@ -199,90 +228,129 @@
 							<p:selectOneRadio value="#{calculator.radians}">
 								<f:selectItem itemLabel="Radians" itemValue="true" />
 								<f:selectItem itemLabel="Degrees" itemValue="false" />
-								<f:ajax render="basicdisplay"/>
+								<f:ajax render="basicdisplay" />
 							</p:selectOneRadio>
 						</p:panelGrid>
 
 						<p:panelGrid rendered="#{calculator.scientific}" columns="4"
 							layout="grid" style="padding-top:5px">
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('lPar')}">
-							<h:commandButton class="btn-sctf" value="(" title="left parenthesis"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('lPar')}">
+								<h:commandButton class="btn-sctf" value="("
+									title="left parenthesis" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('rPar')}">
-							<h:commandButton class="btn-sctf" value=")" title="right parenthesis"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('rPar')}">
+								<h:commandButton class="btn-sctf" value=")"
+									title="right parenthesis" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('virg')}">
-							<h:commandButton class="btn-sctf" value="," title="virgule"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('virg')}">
+								<h:commandButton class="btn-sctf" value="," title="virgule" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('mod')}">
-							<h:commandButton class="btn-sctf" value="mod" title="division remainder"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('mod')}">
+								<h:commandButton class="btn-sctf" value="mod"
+									title="division remainder" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('sqrt')}">
-							<h:commandButton class="btn-sctf" value="&#8730;" title="square root"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('sqrt')}">
+								<h:commandButton class="btn-sctf" value="&#8730;"
+									title="square root" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('cbrt')}">
-							<h:commandButton class="btn-sctf" value="&#8731;" title="cubic root"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('cbrt')}">
+								<h:commandButton class="btn-sctf" value="&#8731;"
+									title="cubic root" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('square')}">
-							<h:commandButton class="btn-sctf" value="x&#178;" title="square"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('square')}">
+								<h:commandButton class="btn-sctf" value="x&#178;" title="square" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('cubic')}">
-							<h:commandButton class="btn-sctf" value="x&#179;" title="cubic"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('cubic')}">
+								<h:commandButton class="btn-sctf" value="x&#179;" title="cubic" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('power')}">
-							<h:commandButton class="btn-sctf" value="x&#696;" title="power"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('power')}">
+								<h:commandButton class="btn-sctf" value="x&#696;" title="power" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('sine')}">
-							<h:commandButton class="btn-sctf" value="sin" title="sine"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('sine')}">
+								<h:commandButton class="btn-sctf" value="sin" title="sine" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('cosine')}">
-							<h:commandButton class="btn-sctf" value="cos" title="cosine"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('cosine')}">
+								<h:commandButton class="btn-sctf" value="cos" title="cosine" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('tangent')}">
-							<h:commandButton class="btn-sctf" value="tan" title="tangent"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('tangent')}">
+								<h:commandButton class="btn-sctf" value="tan" title="tangent" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('pi')}">
-							<h:commandButton class="btn-sctf" value="&#960;" title="pi"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('pi')}">
+								<h:commandButton class="btn-sctf" value="&#960;" title="pi" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('arcsine')}">
-							<h:commandButton class="btn-sctf" value="sin&#713;&sup1;" title="arc sine"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('arcsine')}">
+								<h:commandButton class="btn-sctf" value="sin&#713;&sup1;"
+									title="arc sine" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('arccosine')}">
-							<h:commandButton class="btn-sctf" value="cos&#713;&sup1;" title="arc cosine"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('arccosine')}">
+								<h:commandButton class="btn-sctf" value="cos&#713;&sup1;"
+									title="arc cosine" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('arctangent')}">
-							<h:commandButton class="btn-sctf" value="tan&#713;&sup1;" title="arc tangent"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('arctangent')}">
+								<h:commandButton class="btn-sctf" value="tan&#713;&sup1;"
+									title="arc tangent" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('factorial')}">
-							<h:commandButton class="btn-sctf" value="n!" title="factorial"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('factorial')}">
+								<h:commandButton class="btn-sctf" value="n!" title="factorial" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('exp')}">
-							<h:commandButton class="btn-sctf" value="e&#739;" title="exponensial"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('exp')}">
+								<h:commandButton class="btn-sctf" value="e&#739;"
+									title="exponensial" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('power10')}">
-							<h:commandButton class="btn-sctf" value="10&#739;" title="power of 10"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('power10')}">
+								<h:commandButton class="btn-sctf" value="10&#739;"
+									title="power of 10" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('ln')}">
-							<h:commandButton class="btn-sctf" value="ln" title="natural logarithm"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('ln')}">
+								<h:commandButton class="btn-sctf" value="ln"
+									title="natural logarithm" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('log')}">
-							<h:commandButton class="btn-sctf" value="log" title="logarithm of base 10"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('log')}">
+								<h:commandButton class="btn-sctf" value="log"
+									title="logarithm of base 10" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('logb')}">
-							<h:commandButton class="btn-sctf" value="logb" title="logarithm of base b: log(x,b)"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('logb')}">
+								<h:commandButton class="btn-sctf" value="logb"
+									title="logarithm of base b: log(x,b)" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('gcd')}">
-							<h:commandButton class="btn-sctf" value="gcd" title="greatest common divisor: gcd(a,b)"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('gcd')}">
+								<h:commandButton class="btn-sctf" value="gcd"
+									title="greatest common divisor: gcd(a,b)" />
 							</f:ajax>
-							<f:ajax event="click" render="basicdisplay" listener="#{calculator.key('lcm')}">
-							<h:commandButton class="btn-sctf" value="lcm" title="least common multiple: lcm(a,b)"/>
+							<f:ajax event="click" render="basicdisplay"
+								listener="#{calculator.key('lcm')}">
+								<h:commandButton class="btn-sctf" value="lcm"
+									title="least common multiple: lcm(a,b)" />
 							</f:ajax>
 						</p:panelGrid>
 					</h:panelGroup>
 
 				</div>
 				<div class="ui-grid-col-4" style="padding-left: -50px;">
-				
+								
 					<h:form id="myHist">
 					<p:dataTable class="table" var="e" value="#{calculator.hist.list}"
 						style="width:350px;">
