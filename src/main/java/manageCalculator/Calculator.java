@@ -292,7 +292,7 @@ public class Calculator implements Serializable {
 	}
 	
 	// actions for the buttons
-	public void key(ActionEvent event) {
+	public void key(String s) {
 		String add ="";
 
 		// delete last digit/op
@@ -302,7 +302,7 @@ public class Calculator implements Serializable {
 		// check if a computation was done
 		boolean r = false;
 
-		switch (event.getComponent().getId()) {
+		switch (s) {
 		
 		// numbers
 		case "number0": add = "0"; break;

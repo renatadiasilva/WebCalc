@@ -27,26 +27,24 @@ public class ListUsers {
 		users.add(new User("lucas","passL")); 		
 	}
 
-	// boolean?
 	public User findUser(String name, String pass) {
 		for (User u: users) {
 			if (u.getName().equals(name)) {
 				if (u.checkPass(pass)) {
 					return u;
-				} // verificar erros!
+				}
 			}
 		}
 		return null;
 	}
 	
-	// boolean?
 	public User newUser(String name, String pass) {
 		for(User u:users) {
 			if (u.getName().equals(name)) {
-				return null; //já existe!!! deixar??
+				return null;
 			}
 		}
-		//novo user
+		//new user
 		User newU = new User(name,pass);
 		users.add(newU);
 		return newU;

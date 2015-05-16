@@ -1,6 +1,8 @@
 package myManageChat;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -82,20 +84,37 @@ public class Chat implements Serializable {
 	}
 
 	public void signUp() {
-		if(!pass.isEmpty()&&pass.equals(repeatPass)){
-			if(!name.isEmpty()) {
-				user = users.newUser(name, pass);
-				if (user != null) {
-//					user.setLogged(true);
-				}
-				else; //erro - já existe!!
-			} // else aviso name n preenchido!!
+		if (!name.isEmpty() ) {
+			if (!pass.isEmpty() ) {
+				if (pass.equals(repeatPass)) {
+					user = users.newUser(name, pass);
+					if (user != null) {
+					} else { // existent user
+						error = true;
+						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("This username already exists!"));
+						reset();
+					}
 
+					reset();
+					login = true;
+					active = false;
+
+				} else { // pass not equal
+					error = true;
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Repeat password not equal to password!"));
+					reset();
+				}
+				
+			} else { //empty pass
+				error = true;
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty password!"));
+				reset();
+			}
+		} else { //empty name
+			error = true;
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty username!"));
 			reset();
-			login = true;
-			active = false;
 		}
-		//else alerta pass mal repetida
 	}
 
 	public User getUser() {
@@ -105,20 +124,40 @@ public class Chat implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public void newUser() {
+		login = false;
+		error = false;
+	}
+	
+	public void goBack() {
+		login = true;
+		error = false;
+	}
 
 	public void loginUser(){
-		user = users.findUser(name, pass);
-		
-		if (user != null) {
-			user.setLogged(true);
-		} else { // non existent user
+		if(!name.isEmpty() ) {
+			if(!pass.isEmpty() ) {
+				user = users.findUser(name, pass);
+
+				if (user != null) {
+					user.setLogged(true);
+				} else { //non-existent user or wrong pass
+					error = true;
+					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Wrong username or password!"));
+				}
+
+				active = user!=null;
+			} else { //empty pass
+				error = true;
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty password!"));
+				pass = "";
+			}
+		} else { //empty name
 			error = true;
-			errorType = 1;
-			errorMessage(errorType);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty username!"));
 			reset();
 		}
-		
-		active = user!=null;
 	}
 
 	public void logoutUser(){
@@ -126,6 +165,7 @@ public class Chat implements Serializable {
 		reset();
 		login = true;
 		active = false;
+		error = false;
 	}
 
 	public String getMessage() {
@@ -140,8 +180,12 @@ public class Chat implements Serializable {
 	public void addMessage() {
 		if(!message.isEmpty()){
 			users.addMessage(user.getName()+": "+message);
-			this.message = "";
-		} else; // erro
+			message = "";
+		} else { // empty message
+			error = true;
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty message!"));
+		}
+
 	}
 	
 	public ArrayList<String> getUserChat() {
@@ -162,12 +206,6 @@ public class Chat implements Serializable {
 //			active = false;
 //		} else 
 		active = true;		
-	}
-	
-	public void errorMessage(int i) {
-		switch (i) {
-		case 1: message = "Erro 1!!"; break;
-		}
 	}
 
 	public boolean isError() {

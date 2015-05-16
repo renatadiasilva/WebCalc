@@ -8,14 +8,12 @@ public class User {
 	private String pass;
 	private boolean logged;
 	private ArrayList<String> chatMessages;
-	//synchornize??
 
     public User(String name, String pass) {
     	this.name = name;
     	this.pass = pass;
     	this.logged = false;
     	this.chatMessages = new ArrayList<String>();
-//		this.chatMessages.add("Live Chat");
     }
 
     public String getName() {
