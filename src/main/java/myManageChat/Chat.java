@@ -57,6 +57,10 @@ public class Chat implements Serializable {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	public boolean activeLogin() {
+		return login&&active;
+	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -135,7 +139,7 @@ public class Chat implements Serializable {
 		reset();
 	}
 
-	public void loginUser(){
+	public String loginUser(){
 		if(!name.isEmpty() ) {
 			if(!pass.isEmpty() ) {
 				user = users.findUser(name, pass);
@@ -143,6 +147,7 @@ public class Chat implements Serializable {
 				if (user != null) {
 					error = false;
 					user.setLogged(true);
+					return "index";
 				} else { //non-existent user or wrong pass
 					error = true;
 					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Wrong username or password!"));
@@ -159,15 +164,17 @@ public class Chat implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty username!"));
 			reset();
 		}
+		return "login";
 	}
 
-	public void logoutUser(){
+	public String logoutUser(){
 		user.clean();
 		reset();
 		message="";
 		login = true;
 		active = false;
 		error = false;
+		return "login";
 	}
 
 	public String getMessage() {
@@ -188,15 +195,16 @@ public class Chat implements Serializable {
 			error = true;
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empty message!"));
 		}
-
 	}
-	
+
 	public ArrayList<String> getUserChat() {
 		if (user == null) {
 			ArrayList<String> as = new ArrayList<String>(1);
 			as.add("No chat messages yet");
 			return as;
-		} else return user.getChatMessages();
+		} else {
+			return user.getChatMessages();
+		}
 	}
 
 	public void refresh() {

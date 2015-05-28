@@ -3,7 +3,6 @@ package manageCalculator;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.faces.event.ActionEvent;
 
 import net.objecthunter.exp4j.*;
 import net.objecthunter.exp4j.function.Function;
@@ -23,9 +22,6 @@ public class Calculator implements Serializable {
 	private boolean radians;
 	private boolean clean;
 	private boolean error;
-	
-//	@Inject
-//	private User user;
 	
 	@Inject
 	private Historic hist;
@@ -73,6 +69,14 @@ public class Calculator implements Serializable {
 
 	public Historic getHist() {
 		return hist;
+	}
+
+	public boolean isError() {
+		return error;
+	}
+
+	public void setError(boolean error) {
+		this.error = error;
 	}
 
 	public Statistic getStat() {
@@ -266,7 +270,7 @@ public class Calculator implements Serializable {
 		}
 		
 		// Error Not a Number
-		if (!error) if (s.equals("NaN")) error = true;
+		if (!error) if ( (s.contains("NaN")) || (s.contains("Infinity")) ) error = true;
 		
 		if (s == null) {
 			s = "Mismatched parentheses detected. Please check the expression!";
@@ -455,12 +459,5 @@ public class Calculator implements Serializable {
 		return a;
 	}
 
-//	public User getUser() {
-//		return user;
-//	}
-//
-//	public void setUser(User user) {
-//		this.user = user;
-//	}
-//
+
 }

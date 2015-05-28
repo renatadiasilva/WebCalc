@@ -31,84 +31,36 @@
 
 				<div class="ui-grid-col-4">
 
-					<p:panelGrid columns="1" style="padding-right:10px">
-						<div id="chat">
+					<h:form id="myChat">
+						<p:panelGrid columns="1" style="padding-right:10px">
 
-							<h:form rendered="#{!chat.active}">
+							<h:outputText
+								style="text-align:left;font-weigth:bold;font-family: Arial,sans-serif;"
+								value="Username: #{chat.user.name}" />
 
-								<h:form rendered="#{chat.login}">
-									<h:form>
-										<h:outputText value="Login to Live Chat"
-											style="color:green;font-weigth:bold;" />
-										<p:panelGrid columns="2">
-											<h:outputText value="Username" />
-											<h:inputText id="myUser" value="#{chat.name}" />
-											<h:outputText value="Password" />
-											<h:inputSecret value="#{chat.pass}" />
-										</p:panelGrid>
-										<p:column rowspan="2">
-											<h:commandButton value="Ok" action="#{chat.loginUser}" />
-											<h:commandButton value="New User" action="#{chat.newUser}" />
-										</p:column>
-									</h:form>
-								</h:form>
+							<p:panelGrid columns="1">
+								<p:column rowspan="3">
+									<h:outputText value="Message  " />
+									<h:inputText value="#{chat.message}" />
+									<h:commandButton value="Send" action="#{chat.addMessage}" />
+								</p:column>
+							</p:panelGrid>
+							<p:column rowspan="1">
+								<h:commandButton value="Logout" action="#{chat.logoutUser}" />
+							</p:column>
 
-								<h:form rendered="#{!chat.login}">
-									<h:form>
-										<h:outputText value="New User"
-											style="color:green;font-weigth:bold;" />
-										<p:panelGrid columns="2">
-											<h:outputText value="Username" />
-											<h:inputText value="#{chat.name}" />
-											<h:outputText value="Password" />
-											<h:inputSecret value="#{chat.pass}" />
-											<h:outputText value="Repeat Password" />
-											<h:inputSecret value="#{chat.repeatPass}" />
-										</p:panelGrid>
-										<p:column rowspan="2">
-											<h:commandButton value="Ok" action="#{chat.signUp}" />
-											<h:commandButton value="Back" action="#{chat.goBack}" />
-										</p:column>
-									</h:form>
-								</h:form>
+							<h:form rendered="#{chat.error}">
+								<h:panelGrid columns="1" style="text-align:left">
+									<h:messages showSummary="true" showDetail="false"
+										style="color: red" />
+								</h:panelGrid>
 							</h:form>
-
-							<h:form id="chatMessage" rendered="#{chat.active}">
-
-									<h:form>
-																		<h:outputText
-										style="text-align:left;font-weigth:bold;font-family: Arial,sans-serif;"
-										value="Username: #{chat.user.name}" />
 									
-										<p:panelGrid columns="1">
-											<p:column rowspan="3">
-												<h:outputText value="Message  " />
-												<h:inputText value="#{chat.message}" />
-												<h:commandButton value="Send" action="#{chat.addMessage}" />
-											</p:column>
-										</p:panelGrid>
-										<p:column rowspan="1">
-											<h:commandButton value="Logout" action="#{chat.logoutUser}" />
-										</p:column>
-									</h:form>
+						</p:panelGrid>
+					</h:form>
 
-								</h:form>
-
-								<h:form rendered="#{chat.error}">
-									<p:panelGrid columns="1" style="text-align:left">
-										<h:messages showSummary="true" showDetail="false"
-											style="color: red" />
-									</p:panelGrid>
-								</h:form>
-
-								<script src="js/timer.js" />
-						</div>
-					</p:panelGrid>
-
-					<br />
-					<br />
+					<br /> <br />
 					<h:form id="userChat">
-						<h:form rendered="#{chat.active}">
 
 							<p:panelGrid columns="1">
 								<f:facet name="header">Live Chat</f:facet>
@@ -119,7 +71,6 @@
 							</p:panelGrid>
 
 						</h:form>
-					</h:form>
 
 				</div>
 
